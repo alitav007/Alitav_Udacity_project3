@@ -217,7 +217,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["80:95:cc:46:dc:cf:c0:8a:03:8c:f3:d7:aa:9e:35:47"]
+          fingerprints: ["0a:e2:40:fa:cd:0b:63:97:02:84:a6:4c:ef:f1:95:f8"]
       - attach_workspace:
           at: .
       - run:
@@ -456,19 +456,19 @@ workflows:
            requires:
              - install-backend-dependencies
  
-       - test-frontend:
-          requires: [build-frontend]
-       - test-backend:
-           requires: [build-backend]
-       - scan-backend:
-          requires: [build-backend]
-       - scan-frontend:
-          requires: [build-frontend]
-       -  deploy-infrastructure:
-           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-           filters:
-            branches:
-               only: [main]
+      # - test-frontend:
+      #    requires: [build-frontend]
+      # - test-backend:
+       #    requires: [build-backend]
+       #- scan-backend:
+       #   requires: [build-backend]
+       #- scan-frontend:
+       #   requires: [build-frontend]
+       #-  deploy-infrastructure:
+       #    requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+        #   filters:
+        #    branches:
+         #      only: [main]
        - configure-infrastructure:
             requires: [deploy-infrastructure]
       #- run-migrations:
