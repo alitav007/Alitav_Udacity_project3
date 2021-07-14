@@ -37,7 +37,7 @@ commands:
           name: Revert migrations
           working_directory: ./backend
           command: |
-            SUCCESS=$(curl -H "token: c9c28e9f-179a-42bb-a78c-55671d15c8b7" --request GET https://api.memstash.io/values/DB_MIGRATION_<< parameters.id >>)
+            SUCCESS=$(curl -H "token: 5165aeae-bd55-40b7-924a-b627c97a291e" --request GET https://api.memstash.io/values/DB_MIGRATION_<< parameters.id >>)
             SUCCESS = 1
             if(( $SUCCESS==1 )); 
             then
@@ -183,7 +183,7 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text)
-            curl -H "Content-Type: text/plain" -H "token: c9c28e9f-179a-42bb-a78c-55671d15c8b7" --request PUT --data "http://$BACKEND_IP:3030" https://api.memstash.io/values/BACKEND_URL        
+            curl -H "Content-Type: text/plain" -H "token: 5165aeae-bd55-40b7-924a-b627c97a291e" --request PUT --data "http://$BACKEND_IP:3030" https://api.memstash.io/values/BACKEND_URL        
       - run:
           name: Ensure front-end infrastructure exist
           working_directory: ./.circleci/files
@@ -269,10 +269,10 @@ jobs:
             if grep -q "has been executed successfully" migration_status
             then
               echo "DB migration was successful, will update memstash..."
-              curl -H "Content-Type: text/plain" -H "token: c9c28e9f-179a-42bb-a78c-55671d15c8b7" --request PUT --data "success" https://api.memstash.io/values/DB_MIGRATION_${CIRCLE_WORKFLOW_ID:0:7}
+              curl -H "Content-Type: text/plain" -H "token: 5165aeae-bd55-40b7-924a-b627c97a291e" --request PUT --data "success" https://api.memstash.io/values/DB_MIGRATION_${CIRCLE_WORKFLOW_ID:0:7}
             else
               echo "DB migration failed, please verify setup! Probably the database already exists. Verify setup!"
-              curl -H "Content-Type: text/plain" -H "token: c9c28e9f-179a-42bb-a78c-55671d15c8b7" --request PUT --data "failure" https://api.memstash.io/values/DB_MIGRATION_${CIRCLE_WORKFLOW_ID:0:7}
+              curl -H "Content-Type: text/plain" -H "token: 5165aeae-bd55-40b7-924a-b627c97a291e" --request PUT --data "failure" https://api.memstash.io/values/DB_MIGRATION_${CIRCLE_WORKFLOW_ID:0:7}
             fi
             echo "WorkflowID=${CIRCLE_WORKFLOW_ID:0:7}"   
       - destroy-environment:
@@ -298,7 +298,7 @@ jobs:
           name: Get backend url
           working_directory: ./frontend
           command: |
-            export API_URL=$(curl -H "token: c9c28e9f-179a-42bb-a78c-55671d15c8b7" --request GET https://api.memstash.io/values/BACKEND_URL)
+            export API_URL=$(curl -H "token: 5165aeae-bd55-40b7-924a-b627c97a291e" --request GET https://api.memstash.io/values/BACKEND_URL)
             echo "${API_URL}"
             npm run build    
       - run:
@@ -374,7 +374,7 @@ jobs:
           name: Backend smoke test.
           working_directory: ./backend
           command: |
-            export BACKEND_URL=$(curl -H "token: c9c28e9f-179a-42bb-a78c-55671d15c8b7" --request GET https://api.memstash.io/values/BACKEND_URL)
+            export BACKEND_URL=$(curl -H "token: 5165aeae-bd55-40b7-924a-b627c97a291e" --request GET https://api.memstash.io/values/BACKEND_URL)
             curl "$BACKEND_URL/api/status"
       - run:
           name: Frontend smoke test.
@@ -382,13 +382,8 @@ jobs:
           command: |
             URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.us-west-2.amazonaws.com/index.html"
             curl -s ${URL} | grep -q "Welcome"
-            if curl -s ${URL} | grep "Welcome"
-            then 
-             return 0
-            else
-             return 1
-            f1   
-      - destroy-environment:
+            
+    destroy-environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
           when: on_fail
       - revert-migrations:
@@ -414,7 +409,7 @@ jobs:
             WorkflowID=$(aws cloudformation \
               list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
               --no-paginate --output text)
-            curl -H "Content-Type: text/plain" -H "token: c9c28e9f-179a-42bb-a78c-55671d15c8b7" --request PUT --data "$WorkflowID" https://api.memstash.io/values/WorkflowID
+            curl -H "Content-Type: text/plain" -H "token: 5165aeae-bd55-40b7-924a-b627c97a291e" --request PUT --data "$WorkflowID" https://api.memstash.io/values/WorkflowID
       - run:
           name: Update cloudfront distribution
           working_directory: ./.circleci/files
@@ -436,7 +431,7 @@ jobs:
       - run:
           name: Clean up old environment
           command: |
-            OldWorkflowID=$(curl -H "token: c9c28e9f-179a-42bb-a78c-55671d15c8b7" --request GET https://api.memstash.io/values/WorkflowID)
+            OldWorkflowID=$(curl -H "token: 5165aeae-bd55-40b7-924a-b627c97a291e" --request GET https://api.memstash.io/values/WorkflowID)
             CurrentWorkflowID=${CIRCLE_WORKFLOW_ID:0:7}
             if [[ "$CurrentWorkflowID" != "$OldWorkflowID" ]]
             then
